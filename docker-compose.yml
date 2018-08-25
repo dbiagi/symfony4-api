@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+    php:
+        build: docker/php/
+        ports:
+          - 80:80
+          - 443:443
+        volumes:
+            - .:/var/www/html
+            - ./docker/php/conf/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./docker/php/conf/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+            - ./docker/php/conf/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+            - composer_cache:/var/www/.composer/cache
+        environment:
+            PHP_IDE_CONFIG: "serverName=docker"
+        networks:
+            - local
+
+    database:
+        image: mariadb:10.3
+        volumes:
+            - database:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123
+        networks:
+            - local
+
+
+volumes:
+    database: ~
+    composer_cache: ~
+
+networks:
+    local: ~

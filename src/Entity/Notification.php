@@ -2,16 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Notification
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\NotificationRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ApiResource()
  */
 class Notification
 {

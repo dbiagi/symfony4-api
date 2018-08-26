@@ -2,13 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Post
 {
@@ -39,7 +37,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      */
     public $content;
 
@@ -49,4 +47,12 @@ class Post
      * @ORM\Column(type="string", length=20)
      */
     public $type;
+
+    /**
+     * @var Account
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Account")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     */
+    public $author;
 }

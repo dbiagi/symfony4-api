@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Class Transaction
+ * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
+ */
 class Transaction
 {
     use Timestampable;
@@ -23,7 +27,7 @@ class Transaction
     /**
      * @var double
      *
-     * @ORM\Column(type="decimal", scale=12, precision=2)
+     * @ORM\Column(type="decimal", precision=12, scale=2)
      */
     public $total;
 

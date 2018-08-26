@@ -6,9 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
  */
 class Comment
 {
@@ -26,15 +25,28 @@ class Comment
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     public $coin;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text")
+     */
+    public $content;
 
     /**
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
      */
-    public $account;
+    public $author;
+
+    /**
+     * @var Post
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post")
+     */
+    public $post;
 }

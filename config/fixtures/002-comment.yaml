@@ -1,0 +1,6 @@
+App\Entity\Comment:
+    comment_{0..1000}:
+        content: '<sentences(5, true)>'
+        author: '@account_*'
+        post: '@post_*'
+        coin: '10%? 50'

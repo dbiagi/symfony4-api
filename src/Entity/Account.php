@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Account
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\AccountRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ApiResource
  */
 class Account
 {
@@ -44,16 +42,17 @@ class Account
     public $email;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(type="simple_array")
+     * @ORM\Column(type="string", length=12)
      */
-    public $roles;
+    public $role;
 
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     public $coins;
+
 }

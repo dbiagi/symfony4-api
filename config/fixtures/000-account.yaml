@@ -1,0 +1,6 @@
+App\Entity\Account:
+    account_{0..100}:
+        name: '<name()>'
+        email: '<email()>'
+        role: '50%? guest : subscriber'
+        coins: '20%? <numberBetween(100, 500)>'

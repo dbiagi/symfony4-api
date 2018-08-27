@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Account
@@ -31,6 +32,7 @@ class Account
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     public $name;
 
@@ -38,6 +40,8 @@ class Account
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email()
+     * @Assert\NotBlank()
      */
     public $email;
 
@@ -45,14 +49,15 @@ class Account
      * @var string
      *
      * @ORM\Column(type="string", length=12)
+     * @Assert\NotBlank()
      */
     public $role;
 
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
-    public $coins;
+    public $coins = 0;
 
 }

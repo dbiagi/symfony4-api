@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -25,14 +25,15 @@ class Comment
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
-    public $coin;
+    public $coins = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     public $content;
 
@@ -40,6 +41,7 @@ class Comment
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
+     * @Assert\NotNull()
      */
     public $author;
 
@@ -47,6 +49,7 @@ class Comment
      * @var Post
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Post")
+     * @Assert\NotNull()
      */
     public $post;
 }

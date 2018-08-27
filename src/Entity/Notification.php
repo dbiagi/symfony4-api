@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Notification
@@ -27,6 +28,7 @@ class Notification
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     public $title;
 
@@ -34,6 +36,7 @@ class Notification
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      */
     public $content;
 
@@ -42,6 +45,8 @@ class Notification
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     *
+     * @Assert\NotNull()
      */
     public $account;
 }

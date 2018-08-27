@@ -3,4 +3,4 @@ App\Entity\Comment:
         content: '<sentences(5, true)>'
         author: '@account_*'
         post: '@post_*'
-        coin: '10%? 50'
+        coins: '10%? 50 : 0'

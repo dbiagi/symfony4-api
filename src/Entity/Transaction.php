@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Transaction
@@ -35,6 +36,7 @@ class Transaction
      * @var string
      *
      * @ORM\Column(type="string", length=12)
+     * @Assert\NotBlank()
      */
     public $type;
 
@@ -43,6 +45,7 @@ class Transaction
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     * @Assert\NotNull()
      */
     public $account;
 }

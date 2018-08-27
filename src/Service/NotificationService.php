@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Account;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 
 class NotificationService
 {
@@ -14,7 +16,8 @@ class NotificationService
         $this->notificationRepository = $em->getRepository('App:Notification');
     }
 
-    public function getNotificationByAccount(\App\Entity\Account $account)
+    public function getNotificationByAccount(Account $account): QueryBuilder
     {
+        return $this->notificationRepository->findNotificationsByAccountId($account->id);
     }
 }

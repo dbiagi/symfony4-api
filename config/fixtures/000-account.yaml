@@ -3,4 +3,4 @@ App\Entity\Account:
         name: '<name()>'
         email: '<email()>'
         role: '50%? guest : subscriber'
-        coins: '20%? <numberBetween(100, 500)>'
+        coins: '20%? <numberBetween(100, 500)> : 0'

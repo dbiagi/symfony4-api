@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
@@ -31,6 +32,7 @@ class Post
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     public $title;
 
@@ -38,6 +40,7 @@ class Post
      * @var string
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     public $content;
 
@@ -45,6 +48,7 @@ class Post
      * @var string
      *
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank()
      */
     public $type;
 
@@ -53,6 +57,7 @@ class Post
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @Assert\NotNull()
      */
     public $author;
 }

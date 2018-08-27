@@ -64,15 +64,28 @@ class AccountController extends AbstractController
     {
         $query = $this->accountService->getComments($account->id);
 
-        $pagination = $this->paginator->paginate($query, (int)$request->get('page', 1));
+        $pagination = $this->paginator->paginate($query, $request->attributes->getInt('page', 1));
 
         $data = $this->serializer->serialize($pagination, 'json');
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
+    /**
+     * @Route("/{id}/notifications")
+     *
+     * @param Request $request
+     * @param Account $account
+     * @return Response
+     */
     public function notifications(Request $request, Account $account): Response
     {
-        $this->notificationService->getNotificationByAccount($account);
+        $query = $this->notificationService->getNotificationByAccount($account);
+
+        $pagination = $this->paginator->paginate($query, $request->attributes->getInt('page', 1));
+
+        $data = $this->serializer->serialize($pagination, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 }

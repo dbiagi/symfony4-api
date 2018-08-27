@@ -23,7 +23,7 @@ class Paginator
         throw new \RuntimeException(sprintf('No paginator found for %s class', get_class($target)));
     }
 
-    public function load()
+    private function load(): void
     {
         $this->paginators = [
             new DoctrineQueryBuilderPaginator()

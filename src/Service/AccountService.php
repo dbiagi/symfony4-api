@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Account;
-use App\Entity\Transaction;
 use App\Exception\FloodingException;
 use App\Helper\DateTimeHelper;
 use App\Repository\AccountRepository;
@@ -70,10 +69,5 @@ class AccountService
         }
 
         return false;
-    }
-
-    public function buyCoins(Account $account, $total)
-    {
-
     }
 }

@@ -9,6 +9,7 @@ use App\Paginator\DoctrineQueryBuilderPaginator;
 use App\Service\AccountService;
 use App\Service\CommentService;
 use App\Service\PostService;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,21 +49,49 @@ class PostController extends AbstractController
     }
 
     /**
+     * @Route("/{id}", methods={"get"})
+     *
+     * @param Post $post
+     * @return JsonResponse
+     */
+    public function getAction(Post $post)
+    {
+        $data = $this->serializer->serialize($post, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
+    /**
+     * @Route("/", methods={"get"})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws NonUniqueResultException
+     */
+    public function listAction(Request $request)
+    {
+        $query = $this->postService->findAll();
+
+        $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
+
+        $data = $this->serializer->serialize($pagination, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
+    /**
      * @Route("/{id}/comments", methods={"get"})
      *
      * @param Request $request
      * @param Post $post
      * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public
-    function comments(
-        Request $request,
-        Post $post
-    ): Response {
+    public function comments(Request $request, Post $post): Response
+    {
         $query = $this->commentService->getCommentsByPost($post);
 
-        $comments = $this->paginator->paginate($query, $request->attributes->getInt('page', 1));
+        $comments = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
         $data = $this->serializer->serialize($comments, 'json');
 
@@ -99,6 +128,11 @@ class PostController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        return new JsonResponse(
+            $this->serializer->serialize($comment, 'json'),
+            Response::HTTP_CREATED,
+            [],
+            true
+        );
     }
 }

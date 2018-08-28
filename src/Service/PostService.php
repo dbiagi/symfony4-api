@@ -4,11 +4,14 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\Comment;
+use App\Entity\Transaction;
 use App\Exception\FloodingException;
 use App\Exception\InvalidEntityException;
 use App\Exception\NotEnoughCoinsException;
 use App\Mailer\CommentNotificationMailer;
+use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostService
@@ -21,17 +24,29 @@ class PostService
     private $validator;
     /** @var AccountService */
     private $accountService;
+    /** @var TransactionService */
+    private $transactionService;
+    /** @var PostRepository */
+    private $postRepository;
 
     public function __construct(
         EntityManagerInterface $em,
         ValidatorInterface $validator,
         CommentNotificationMailer $mailer,
-        AccountService $accountService
+        AccountService $accountService,
+        TransactionService $transactionService
     ) {
         $this->em = $em;
         $this->mailer = $mailer;
         $this->validator = $validator;
         $this->accountService = $accountService;
+        $this->transactionService = $transactionService;
+        $this->postRepository = $this->em->getRepository('App:Post');
+    }
+
+    public function findAll(): QueryBuilder
+    {
+        return $this->postRepository->findAllPaginated();
     }
 
     /**
@@ -51,7 +66,7 @@ class PostService
         }
 
         if ($comment->coins > 0) {
-            // @TODO gravar a transação aqui
+            $this->transactionService->create($comment->author, $comment->coins, Transaction::TYPE_DEBT);
         }
 
         $this->em->persist($comment);
@@ -71,24 +86,8 @@ class PostService
     {
         $this->accountService->isFlooding($comment->author);
 
-        $this->hasEnoughCoins($comment);
-
         if ($comment->coins === 0 && $comment->author->role === Account::ROLE_GUEST && $comment->post->author === Account::ROLE_GUEST) {
             throw new \RuntimeException('You can\'t comment on this post');
-        }
-
-        return true;
-    }
-
-    /**
-     * @param Comment $comment
-     * @return bool
-     * @throws NotEnoughCoinsException
-     */
-    private function hasEnoughCoins(Comment $comment)
-    {
-        if ($comment->coins > 0 && $comment->author->coins < $comment->coins) {
-            throw new NotEnoughCoinsException($comment->coins - $comment->author->coins);
         }
 
         return true;

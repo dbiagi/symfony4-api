@@ -44,12 +44,43 @@ class AccountController extends AbstractController
     }
 
     /**
+     * @Route("/", methods={"get"})
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function listAll(Request $request)
+    {
+        $query = $this->accountService->findAll();
+
+        $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
+
+        $data = $this->serializer->serialize($pagination, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
+
+    /**
      * @Route("/", methods={"post"})
      */
     public function post(): Response
     {
 
         return new Response('ok');
+    }
+
+    /**
+     * @Route("/{id}", methods={"get"})
+     *
+     * @param Account $account
+     * @return Response
+     */
+    public function getAccount(Account $account): Response
+    {
+        $data = $this->serializer->serialize($account, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
@@ -64,7 +95,7 @@ class AccountController extends AbstractController
     {
         $query = $this->accountService->getComments($account->id);
 
-        $pagination = $this->paginator->paginate($query, $request->attributes->getInt('page', 1));
+        $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
         $data = $this->serializer->serialize($pagination, 'json');
 
@@ -82,7 +113,7 @@ class AccountController extends AbstractController
     {
         $query = $this->notificationService->getNotificationByAccount($account);
 
-        $pagination = $this->paginator->paginate($query, $request->attributes->getInt('page', 1));
+        $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
         $data = $this->serializer->serialize($pagination, 'json');
 

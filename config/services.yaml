@@ -1,6 +1,7 @@
 parameters:
     locale: 'en'
     comment_cooldown: 60 # time to wait between comments
+    tax_percentage: 10
 
 services:
     _defaults:
@@ -9,6 +10,8 @@ services:
         public: false
         bind:
             $commentCooldown: '%comment_cooldown%'
+            $environment: '%env(APP_ENV)%'
+            $taxPercentage: '%tax_percentage%'
 
     App\:
         resource: '../src/*'

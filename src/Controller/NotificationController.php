@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Account;
-use App\Paginator\DoctrineQueryBuilderPaginator;
 use App\Paginator\Paginator;
 use App\Service\NotificationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 

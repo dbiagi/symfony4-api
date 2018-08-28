@@ -56,5 +56,4 @@ class Pagination
         return $this;
     }
 
-
 }

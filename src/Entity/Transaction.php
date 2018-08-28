@@ -8,13 +8,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class Transaction
  * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Transaction
 {
     use Timestampable;
 
-    public const TRANSACTION_TYPE_COIN = 'coin';
-    public const TRANSACTION_TYPE_SUBSCRIPTION = 'subscription';
+    /** @var string Representa um débito em relação a Account */
+    public const TYPE_DEBT = 'debt';
+    /** @var string Representa um crédito em relação a Account */
+    public const TYPE_CREDIT = 'credit';
 
     /**
      * @var int
@@ -48,4 +51,12 @@ class Transaction
      * @Assert\NotNull()
      */
     public $account;
+
+    /**
+     * @var Transaction
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Transaction")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    public $reference;
 }

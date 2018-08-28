@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Account;
+use App\Entity\Transaction;
 use App\Exception\FloodingException;
+use App\Helper\DateTimeHelper;
 use App\Repository\AccountRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,16 +20,22 @@ class AccountService
     /** @var string */
     private $commentCooldown;
 
-    public function __construct(EntityManagerInterface $em, $commentCooldown)
+    public function __construct(EntityManagerInterface $em, TransactionService $transactionService, $commentCooldown)
     {
         $this->repository = $em->getRepository('App:Account');
         $this->commentsRepository = $em->getRepository('App:Comment');
+        $this->transactionService = $transactionService;
         $this->commentCooldown = $commentCooldown;
     }
 
     public function find(int $id): ?Account
     {
         return $this->repository->find($id);
+    }
+
+    public function findAll(): QueryBuilder
+    {
+        return $this->repository->findAllPaginated();
     }
 
     public function getComments(int $accountId): QueryBuilder
@@ -55,10 +63,17 @@ class AccountService
 
         $now = new \DateTime();
 
-        $secondsAfterLastComment = $now->diff($comment->createdAt)->s;
+        $secondsAfterLastComment = DateTimeHelper::getDiffInSeconds($comment->createdAt, $now);
 
         if ($secondsAfterLastComment < $this->commentCooldown) {
             throw new FloodingException($this->commentCooldown - $secondsAfterLastComment);
         }
+
+        return false;
+    }
+
+    public function buyCoins(Account $account, $total)
+    {
+
     }
 }

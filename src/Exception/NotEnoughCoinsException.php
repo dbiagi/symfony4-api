@@ -4,7 +4,7 @@ namespace App\Exception;
 
 class NotEnoughCoinsException extends \Exception
 {
-    private const MESSAGE = 'You don\'t have enough coins. Buy more %d to post this comment.';
+    private const MESSAGE = 'Você não tem saldo suficiente =(. Está faltando somente %d moedas.';
 
     public function __construct(int $coinsLeft)
     {

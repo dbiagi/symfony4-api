@@ -6,5 +6,8 @@ use Doctrine\ORM\EntityRepository;
 
 class AccountRepository extends EntityRepository
 {
-
+    public function findAllPaginated()
+    {
+        return $this->createQueryBuilder('account');
+    }
 }

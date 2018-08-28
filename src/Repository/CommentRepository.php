@@ -30,6 +30,7 @@ class CommentRepository extends EntityRepository
             ->join('comment.author', 'author')
             ->where('author.id = :accountId')
             ->setParameter('accountId', $accountId)
+            ->setMaxResults(1)
             ->orderBy('comment.createdAt', 'DESC');
 
         return $qb->getQuery()->getSingleResult();

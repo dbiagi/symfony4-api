@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Account;
-use App\Entity\Transaction;
+use App\Exception\InvalidEntityException;
 use App\Paginator\Paginator;
 use App\Service\AccountService;
 use App\Service\NotificationService;
@@ -71,10 +71,21 @@ class AccountController extends AbstractController
     /**
      * @Route("/", methods={"post"})
      */
-    public function post(): Response
+    public function post(Request $request): Response
     {
+        $account = $this->serializer->deserialize($request->getContent(), Account::class, 'json');
 
-        return new Response('ok');
+        try {
+            $account = $this->accountService->create($account);
+
+            $data = $this->serializer->serialize($account, 'json');
+
+            return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        } catch (InvalidEntityException $e) {
+            return new JsonResponse($e->getErrors(), Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -137,12 +148,12 @@ class AccountController extends AbstractController
     {
         $content = json_decode($request->getContent(), true);
 
-        if(!isset($content['amount'])) {
+        if (!isset($content['amount'])) {
             return new JsonResponse(['error' => 'Tem que ser informato o campo amount'], Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            $this->transactionService->create($account, $content['amount'], Transaction::TYPE_CREDIT);
+            $this->transactionService->credit($account, $content['amount']);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }

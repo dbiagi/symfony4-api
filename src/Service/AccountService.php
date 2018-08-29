@@ -4,11 +4,13 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Exception\FloodingException;
+use App\Exception\InvalidEntityException;
 use App\Helper\DateTimeHelper;
 use App\Repository\AccountRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AccountService
 {
@@ -18,12 +20,20 @@ class AccountService
     private $commentsRepository;
     /** @var string */
     private $commentCooldown;
+    /** @var ValidatorInterface */
+    private $validator;
+    /** @var EntityManagerInterface */
+    private $em;
 
-    public function __construct(EntityManagerInterface $em, TransactionService $transactionService, $commentCooldown)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ValidatorInterface $validator,
+        $commentCooldown
+    ) {
+        $this->em = $em;
         $this->repository = $em->getRepository('App:Account');
         $this->commentsRepository = $em->getRepository('App:Comment');
-        $this->transactionService = $transactionService;
+        $this->validator = $validator;
         $this->commentCooldown = $commentCooldown;
     }
 
@@ -69,5 +79,26 @@ class AccountService
         }
 
         return false;
+    }
+
+    /**
+     * @param Account $account
+     * @return Account
+     * @throws InvalidEntityException
+     */
+    public function create(Account $account): Account
+    {
+        $violations = $this->validator->validate($account);
+
+        if ($violations->count() > 0) {
+            throw new InvalidEntityException($violations);
+        }
+
+
+
+        $this->em->persist($account);
+        $this->em->flush();
+
+        return $account;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Exception\InvalidEntityException;
@@ -10,6 +11,7 @@ use App\Service\AccountService;
 use App\Service\CommentService;
 use App\Service\PostService;
 use Doctrine\ORM\NonUniqueResultException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,5 +136,80 @@ class PostController extends AbstractController
             [],
             true
         );
+    }
+
+    /**
+     * @Route("/{post_id}/comments/{comment_id}", methods={"delete"})
+     * @ParamConverter("post", options={"id" = "post_id"})
+     * @ParamConverter("comment", options={"id" = "comment_id"})
+     * @param Request $request
+     * @param Post $post
+     * @param Comment $comment
+     * @return JsonResponse
+     */
+    public function deleteComment(Request $request, Post $post, Comment $comment)
+    {
+        $params = json_decode($request->getContent(), true);
+
+        if (!$params['account']) {
+            return new JsonResponse(
+                ['error' => sprintf('Sua conta de usuário deve ser informada.')],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $account = $this->accountService->findByEmail($params['account']);
+
+        if (!$account) {
+            return new JsonResponse(
+                ['error' => sprintf('Conta com email %s não encontrada.', $params['account'])],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $this->postService->removeComment($account, $comment);
+
+        return new JsonResponse(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/{post_id}/{account_id}", methods={"delete"})
+     * @ParamConverter("post", options={"id" = "post_id"})
+     * @ParamConverter("account", options={"id" = "account_id"})
+     * @param Request $request
+     * @param Post $post
+     * @param Account $account
+     * @return JsonResponse
+     */
+    public function deleteCommentsOfUser(Request $request, Post $post, Account $account)
+    {
+        $params = json_decode($request->getContent(), true);
+
+        if (!$params['account']) {
+            return new JsonResponse(
+                ['error' => sprintf('Sua conta de usuário deve ser informada.')],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $postAuthor = $this->accountService->findByEmail($params['account']);
+
+        if (!$postAuthor) {
+            return new JsonResponse(
+                ['error' => sprintf('Conta com email %s não encontrada.', $params['account'])],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($postAuthor->id !== $post->author->id) {
+            return new JsonResponse(
+                ['error' => 'Somente o dono do post pode remover os comentários.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $this->postService->removeAllUserComments($account, $post);
+
+        return new JsonResponse(null, Response::HTTP_OK);
     }
 }

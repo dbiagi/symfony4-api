@@ -29,26 +29,21 @@ class TransactionService
     /**
      * @param Account $account
      * @param int $coins
-     * @param $type
      * @return Transaction
      * @throws NotEnoughCoinsException
      */
-    public function create(Account $account, int $coins, $type): Transaction
+    public function debit(Account $account, int $coins): Transaction
     {
-        if (!in_array($type, [Transaction::TYPE_DEBT, Transaction::TYPE_CREDIT])) {
-            throw new \RuntimeException(sprintf('Transction of type %s not supported', $type));
-        }
-
-        if ($type === Transaction::TYPE_DEBT && $account->coins < $coins) {
+        if ($account->coins < $coins) {
             throw new NotEnoughCoinsException($coins - $account->coins);
         }
 
         $t = new Transaction();
         $t->account = $account;
         $t->total = $coins;
-        $t->type = $type;
+        $t->type = Transaction::TYPE_DEBT;
 
-        $account->coins += $type === Transaction::TYPE_CREDIT ? $coins : -$coins;
+        $account->coins -= $coins;
 
         $this->em->persist($t);
         $this->em->persist($account);
@@ -60,7 +55,7 @@ class TransactionService
         return $t;
     }
 
-    public function tax(Account $account, Transaction $reference, $flush = false)
+    private function tax(Account $account, Transaction $reference)
     {
         $taxTotal = $reference->total * ($this->taxPercentage / 100);
 
@@ -74,10 +69,22 @@ class TransactionService
 
         $this->em->persist($reference);
         $this->em->persist($t);
+    }
 
-        if ($flush) {
-            $this->em->flush();
-        }
+    public function credit(Account $account, int $coins): Transaction
+    {
+        $t = new Transaction();
+        $t->account = $account;
+        $t->type = Transaction::TYPE_CREDIT;
+        $t->total = $coins;
+        $account->coins += $coins;
+
+        $this->em->persist($t);
+        $this->em->persist($account);
+
+        $this->em->flush();
+
+        return $t;
     }
 
     public function getTransactionByAccount(Account $account): QueryBuilder

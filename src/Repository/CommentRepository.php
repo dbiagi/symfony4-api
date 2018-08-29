@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Account;
 use App\Entity\Comment;
+use App\Entity\Post;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
@@ -34,5 +36,18 @@ class CommentRepository extends EntityRepository
             ->orderBy('comment.createdAt', 'DESC');
 
         return $qb->getQuery()->getSingleResult();
+    }
+
+    public function findAllCommentsByAccountAndPost(Account $account, Post $post): ?array
+    {
+        return $this->createQueryBuilder('comment')
+            ->join('comment.post', 'post')
+            ->join('comment.author', 'account')
+            ->andWhere('account.id = :accountId')
+            ->andWhere('post.id = :postId')
+            ->setParameter('accountId', $account->id)
+            ->setParameter('postId', $post->id)
+            ->getQuery()
+            ->getResult();
     }
 }

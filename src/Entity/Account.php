@@ -50,6 +50,7 @@ class Account
      *
      * @ORM\Column(type="string", length=12)
      * @Assert\NotBlank()
+     * @Assert\Choice(callback="getAccountRoles")
      */
     public $role;
 
@@ -60,4 +61,8 @@ class Account
      */
     public $coins = 0;
 
+    public static function getAccountRoles()
+    {
+        return [self::ROLE_GUEST, self::ROLE_SUBSCRIBER];
+    }
 }

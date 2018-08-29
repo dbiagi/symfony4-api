@@ -17,21 +17,18 @@ class CommentService
         $this->commentsRepository = $em->getRepository('App:Comment');
     }
 
-    /**
-     * @param Account $account
-     * @return QueryBuilder
-     */
     public function getCommentsByAccount(Account $account): QueryBuilder
     {
         return $this->commentsRepository->findAllCommentsByAccountId($account->id);
     }
 
-    /**
-     * @param Post $post
-     * @return QueryBuilder
-     */
     public function getCommentsByPost(Post $post): QueryBuilder
     {
         return $this->commentsRepository->findAllCommentsByPostId($post->id);
+    }
+
+    public function findAllCommentsByAccountAndPost(Account $account, Post $post)
+    {
+        return $this->commentsRepository->findAllCommentsByAccountAndPost($account, $post);
     }
 }

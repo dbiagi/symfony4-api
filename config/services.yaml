@@ -1,6 +1,6 @@
 parameters:
     locale: 'en'
-    comment_cooldown: 60 # time to wait between comments
+    comment_cooldown: 1 # time to wait between comments
     tax_percentage: 10
 
 services:

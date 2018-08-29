@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Paginator\Paginator;
 use App\Service\NotificationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,5 +30,10 @@ class NotificationController extends AbstractController
         $this->notificationService = $notificationService;
         $this->serializer = $serializer;
         $this->paginator = $paginator;
+    }
+
+    public function listByAccount(Account $account)
+    {
+        $notifications = $this->notificationService->getNotificationByAccount($account);
     }
 }

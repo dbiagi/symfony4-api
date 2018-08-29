@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Account;
+use App\Entity\Notification;
 use App\Exception\InvalidEntityException;
 use App\Paginator\Paginator;
 use App\Service\AccountService;
@@ -132,6 +133,15 @@ class AccountController extends AbstractController
         $query = $this->notificationService->getNotificationByAccount($account);
 
         $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
+
+        $now = new \DateTime();
+
+        /** @var Notification $notification */
+        foreach ($pagination->getData() as $notification) {
+            $notification->viewedAt = $now;
+        }
+
+        $this->get('doctrine')->getManager()->flush();
 
         $data = $this->serializer->serialize($pagination, 'json');
 

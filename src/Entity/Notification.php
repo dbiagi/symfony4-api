@@ -49,4 +49,11 @@ class Notification
      * @Assert\NotNull()
      */
     public $account;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    public $viewedAt;
 }

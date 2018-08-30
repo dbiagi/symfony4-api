@@ -134,14 +134,10 @@ class AccountController extends AbstractController
 
         $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
-        $now = new \DateTime();
-
         /** @var Notification $notification */
         foreach ($pagination->getData() as $notification) {
-            $notification->viewedAt = $now;
+            $this->notificationService->read($notification);
         }
-
-        $this->get('doctrine')->getManager()->flush();
 
         $data = $this->serializer->serialize($pagination, 'json');
 

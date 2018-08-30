@@ -56,4 +56,11 @@ class Notification
      * @ORM\Column(type="datetime", nullable=true)
      */
     public $viewedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    public $expireAt;
 }

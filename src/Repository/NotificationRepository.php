@@ -11,7 +11,9 @@ class NotificationRepository extends EntityRepository
     {
         return $this->createQueryBuilder('notification')
             ->join('notification.account', 'account')
-            ->where('account.id = :accountId')
-            ->setParameter('accountId', $accountId);
+            ->andWhere('account.id = :accountId')
+            ->setParameter('accountId', $accountId)
+            ->andWhere('notification.expireAt >= :now')
+            ->setParameter('now', date('Y-m-d G:i:s'));
     }
 }

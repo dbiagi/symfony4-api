@@ -8,7 +8,6 @@ use App\Entity\Post;
 use App\Exception\FloodingException;
 use App\Exception\InvalidEntityException;
 use App\Exception\NotEnoughCoinsException;
-use App\Mailer\CommentNotificationMailer;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -18,8 +17,8 @@ class PostService
 {
     /** @var EntityManagerInterface */
     private $em;
-    /** @var CommentNotificationMailer */
-    private $mailer;
+    /** @var NotificationService */
+    private $notificationService;
     /** @var ValidatorInterface */
     private $validator;
     /** @var AccountService */
@@ -34,13 +33,13 @@ class PostService
     public function __construct(
         EntityManagerInterface $em,
         ValidatorInterface $validator,
-        CommentNotificationMailer $mailer,
+        NotificationService $notificationService,
         AccountService $accountService,
         TransactionService $transactionService,
         CommentService $commentService
     ) {
         $this->em = $em;
-        $this->mailer = $mailer;
+        $this->notificationService = $notificationService;
         $this->validator = $validator;
         $this->accountService = $accountService;
         $this->transactionService = $transactionService;
@@ -76,7 +75,11 @@ class PostService
         $this->em->persist($comment);
         $this->em->flush();
 
-        $this->mailer->send($comment);
+        $this->notificationService->create(
+            $comment->post->author,
+            'Someone commented on your post',
+            sprintf('The user %s has commented on your post "%s"', $comment->author->name, $comment->post->title)
+        );
     }
 
     /**

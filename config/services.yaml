@@ -1,7 +1,8 @@
 parameters:
     locale: 'en'
     comment_cooldown: 1 # time to wait between comments
-    tax_percentage: 10
+    tax_percentage: 10 # porcentagem de taxa que ficará retida ao realizar um comentário com moeda
+    notification_lifespan: 3600 # tempo de vida de uma notificação até ela expirar
 
 services:
     _defaults:
@@ -12,6 +13,7 @@ services:
             $commentCooldown: '%comment_cooldown%'
             $environment: '%env(APP_ENV)%'
             $taxPercentage: '%tax_percentage%'
+            $notificationLifespan: '%notification_lifespan%'
 
     App\:
         resource: '../src/*'

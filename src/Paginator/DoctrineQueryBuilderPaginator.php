@@ -29,8 +29,8 @@ class DoctrineQueryBuilderPaginator implements PaginatorInterface
         return new Pagination($data, (int)$count);
     }
 
-    public function supports($class): bool
+    public function supports($target): bool
     {
-        return $class === QueryBuilder::class;
+        return $target === QueryBuilder::class;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Account;
 use App\Entity\Post;
+use App\Helper\CommentSorter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -22,9 +23,11 @@ class CommentService
         return $this->commentsRepository->findAllCommentsByAccountId($account->id);
     }
 
-    public function getCommentsByPost(Post $post): QueryBuilder
+    public function getCommentsByPost(Post $post): array
     {
-        return $this->commentsRepository->findAllCommentsByPostId($post->id);
+        $query = $this->commentsRepository->findAllCommentsByPostId($post->id);
+
+        return CommentSorter::sort($query->getQuery()->getResult());
     }
 
     public function findAllCommentsByAccountAndPost(Account $account, Post $post)

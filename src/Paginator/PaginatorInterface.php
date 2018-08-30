@@ -6,5 +6,5 @@ interface PaginatorInterface
 {
     public function paginate($target, int $page = 1, int $itensPerPage = 10, array $context = []): Pagination;
 
-    public function supports($class): bool;
+    public function supports($target): bool;
 }

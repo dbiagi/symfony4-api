@@ -20,10 +20,13 @@ class CommentRepository extends EntityRepository
 
     public function findAllCommentsByPostId(int $postId): QueryBuilder
     {
-        return $this->createQueryBuilder('comment')
-            ->join('comment.post', 'post')
+        $qb = $this->createQueryBuilder('comment');
+
+        return $qb->join('comment.post', 'post')
             ->where('post.id = :postId')
-            ->setParameter('postId', $postId);
+            ->setParameter('postId', $postId)
+            ->addOrderBy('DATE_ADD(comment.createdAt, comment.coins, \'MINUTE\')', 'desc')
+            ->setMaxResults(100);
     }
 
     public function findLastCommentByAccountId(int $accountId): ?Comment

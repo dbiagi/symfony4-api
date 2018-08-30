@@ -6,7 +6,7 @@ use App\Entity\Account;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Exception\InvalidEntityException;
-use App\Paginator\DoctrineQueryBuilderPaginator;
+use App\Paginator\Paginator;
 use App\Service\AccountService;
 use App\Service\CommentService;
 use App\Service\PostService;
@@ -27,7 +27,7 @@ class PostController extends AbstractController
 {
     /** @var CommentService */
     private $commentService;
-    /** @var DoctrineQueryBuilderPaginator */
+    /** @var Paginator */
     private $paginator;
     /** @var SerializerInterface */
     private $serializer;
@@ -39,7 +39,7 @@ class PostController extends AbstractController
     public function __construct(
         CommentService $commentService,
         SerializerInterface $serializer,
-        DoctrineQueryBuilderPaginator $paginator,
+        Paginator $paginator,
         AccountService $accountService,
         PostService $postService
     ) {
@@ -91,9 +91,9 @@ class PostController extends AbstractController
      */
     public function comments(Request $request, Post $post): Response
     {
-        $query = $this->commentService->getCommentsByPost($post);
+        $results = $this->commentService->getCommentsByPost($post);
 
-        $comments = $this->paginator->paginate($query, $request->query->getInt('page', 1));
+        $comments = $this->paginator->paginate($results, $request->query->getInt('page', 1));
 
         $data = $this->serializer->serialize($comments, 'json');
 

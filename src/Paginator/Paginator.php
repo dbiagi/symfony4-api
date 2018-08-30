@@ -23,8 +23,7 @@ class Paginator
     public function paginate($target, int $page = 1, int $itensPerPage = 10, array $context = [])
     {
         foreach ($this->paginators as $paginator) {
-            if ((is_object($target) && $paginator->supports(get_class($target))) ||
-                (is_array($target) && $paginator->supports([]))) {
+            if ($paginator->supports($target)) {
                 return $paginator->paginate($target, $page, $itensPerPage, $context);
             }
         }

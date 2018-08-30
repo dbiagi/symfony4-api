@@ -28,9 +28,15 @@ class CommentSorter
         }
 
         usort($featureds, function (Comment $a, Comment $b) use ($now) {
-            if($a->createdAt->getTimestamp())
+            if($a->coins === $b->coins) return 0;
+            else return $a->coins < $b->coins ? -1 : 1;
         });
 
-        return $comments;
+        usort($normal, function(Comment $a, Comment $b){
+            if($a->createdAt->getTimestamp() === $b->createdAt->getTimestamp()) return 0;
+            else return $a->createdAt < $b->createdAt ? -1 : 1;
+        });
+
+        return array_merge($featureds, $normal);
     }
 }

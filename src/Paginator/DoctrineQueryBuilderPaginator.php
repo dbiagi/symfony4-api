@@ -31,6 +31,6 @@ class DoctrineQueryBuilderPaginator implements PaginatorInterface
 
     public function supports($target): bool
     {
-        return $target === QueryBuilder::class;
+        return is_object($target) && get_class($target) === QueryBuilder::class;
     }
 }

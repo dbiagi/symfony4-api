@@ -28,8 +28,8 @@ class Paginator
             }
         }
 
-        throw new \RuntimeException(
-            sprintf('No paginator found for %s class',is_array($target) ? 'array' : get_class($target))
-        );
+        $type = is_object($target) ? get_class($target) : gettype($target);
+
+        throw new \RuntimeException(sprintf('No paginator found for %s class', $type));
     }
 }

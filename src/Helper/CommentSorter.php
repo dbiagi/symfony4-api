@@ -8,25 +8,27 @@ class CommentSorter
 {
     public static function sort(array $comments): array
     {
+        $featureds = [];
+        $normal = [];
+
         $now = new \DateTime();
 
-        usort($comments, function (Comment $a, Comment $b) use ($now) {
-            $dateA = clone $a->createdAt;
-            $dateB = clone $b->createdAt;
+        foreach ($comments as $comment) {
+            if($comment->coins > 0) {
+                $createAt = clone $comment->createdAt;
+                $createdAt->modify(sprintf('+%d minutes', $comment->coins));
 
-            if($a->coins > 0) {
-                $dateA = $dateA->modify(sprintf('+%d minutes', $a->coins));
-                $dateA = $dateA > $now ? $dateA : clone $a->createdAt;
+                if($createAt > $now) {
+                    $featureds[] = $comment;
+                    continue;
+                }
             }
 
-            if($b->coins > 0) {
-                $dateB = $dateB->modify(sprintf('+%d minutes', $b->coins));
-                $dateB = $dateB > $now ? $dateB : clone $b->createdAt;
-            }
+            $normal[] = $comment;
+        }
 
-            if($dateA->getTimestamp() === $dateB->getTimestamp()) return 0;
-
-            return $dateB > $dateA ? 1 : -1;
+        usort($featureds, function (Comment $a, Comment $b) use ($now) {
+            if($a->createdAt->getTimestamp())
         });
 
         return $comments;

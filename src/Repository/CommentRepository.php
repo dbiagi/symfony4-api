@@ -38,7 +38,7 @@ class CommentRepository extends EntityRepository
             ->setMaxResults(1)
             ->orderBy('comment.createdAt', 'DESC');
 
-        return $qb->getQuery()->getSingleResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function findAllCommentsByAccountAndPost(Account $account, Post $post): ?array

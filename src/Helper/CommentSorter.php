@@ -6,6 +6,10 @@ use App\Entity\Comment;
 
 class CommentSorter
 {
+    /**
+     * @param Comment[] $comments
+     * @return Comment[]
+     */
     public static function sort(array $comments): array
     {
         $featureds = [];
@@ -16,7 +20,7 @@ class CommentSorter
         foreach ($comments as $comment) {
             if($comment->coins > 0) {
                 $createAt = clone $comment->createdAt;
-                $createdAt->modify(sprintf('+%d minutes', $comment->coins));
+                $createAt->modify(sprintf('+%d minutes', $comment->coins));
 
                 if($createAt > $now) {
                     $featureds[] = $comment;

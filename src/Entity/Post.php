@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -49,6 +50,7 @@ class Post
      *
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank()
+     * @Assert\Choice(callback="getPostTypes")
      */
     public $type;
 
@@ -60,4 +62,13 @@ class Post
      * @Assert\NotNull()
      */
     public $author;
+
+    public static function getPostTypes(): array
+    {
+        return [
+            self::TYPE_PHOTO,
+            self::TYPE_TEXT,
+            self::TYPE_VIDEO
+        ];
+    }
 }

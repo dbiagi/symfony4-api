@@ -45,6 +45,7 @@ Pronto, se tudo der certo então deu certo \o/.
 
 Segue imagem com o diagrama do schema da aplicação
 
+![Diagrama](https://github.com/dbiagi/esapiens-api/blob/master/schema.png)
 
 
 ## Endpoints

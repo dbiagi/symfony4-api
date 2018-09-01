@@ -41,6 +41,12 @@ sh install.sh
 
 Pronto, se tudo der certo então deu certo \o/.
 
+## Schema
+
+Segue imagem com o diagrama do schema da aplicação
+
+
+
 ## Endpoints
 | Método | URL | Descrição
 |--------:|-----|-----|
@@ -87,7 +93,7 @@ GET /accounts/
 }
 ```
 
-### Criar de conta
+### Criar conta
 #### Requisição: 
 ```
 POST /accounts/

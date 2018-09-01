@@ -58,7 +58,7 @@ class AccountController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function listAll(Request $request)
+    public function listAll(Request $request): JsonResponse
     {
         $query = $this->accountService->findAll();
 
@@ -150,7 +150,7 @@ class AccountController extends AbstractController
      * @param Account $account
      * @return JsonResponse
      */
-    public function buyCoins(Request $request, Account $account)
+    public function buyCoins(Request $request, Account $account): JsonResponse
     {
         $content = json_decode($request->getContent(), true);
 

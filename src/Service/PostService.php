@@ -58,7 +58,7 @@ class PostService
      * @throws InvalidEntityException
      * @throws FloodingException
      */
-    public function addComment(Comment $comment)
+    public function addComment(Comment $comment): void
     {
         $this->userCanComment($comment);
 
@@ -99,7 +99,7 @@ class PostService
         return true;
     }
 
-    public function removeComment(Account $account, Comment $comment)
+    public function removeComment(Account $account, Comment $comment): void
     {
         if (($account->id !== $comment->author->id) && ($account->id !== $comment->post->author->id)) {
             throw new \RuntimeException('Somente o dono do comentário ou o dono do post pode apagar este comentário');
@@ -109,7 +109,7 @@ class PostService
         $this->em->flush();
     }
 
-    public function removeAllUserComments(Account $account, Post $post)
+    public function removeAllUserComments(Account $account, Post $post): void
     {
         $comments = $this->commentService->findAllCommentsByAccountAndPost($account, $post);
 

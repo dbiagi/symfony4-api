@@ -11,7 +11,6 @@ use App\Service\AccountService;
 use App\Service\CommentService;
 use App\Service\PostService;
 use Doctrine\ORM\NonUniqueResultException;
-use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 
 /**
  * Class PostController
@@ -58,7 +56,7 @@ class PostController extends AbstractController
      * @param Post $post
      * @return JsonResponse
      */
-    public function getAction(Post $post)
+    public function getAction(Post $post): JsonResponse
     {
         $data = $this->serializer->serialize($post, 'json');
 
@@ -72,7 +70,7 @@ class PostController extends AbstractController
      * @return JsonResponse
      * @throws NonUniqueResultException
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request): JsonResponse
     {
         $query = $this->postService->findAll();
 
@@ -148,7 +146,7 @@ class PostController extends AbstractController
      * @param Comment $comment
      * @return JsonResponse
      */
-    public function deleteComment(Request $request, Post $post, Comment $comment)
+    public function deleteComment(Request $request, Post $post, Comment $comment): JsonResponse
     {
         $params = json_decode($request->getContent(), true);
 
@@ -174,7 +172,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{post_id}/{account_id}", methods={"delete"})
+     * @Route("/{post_id}/comments/accounts/{account_id}", methods={"delete"})
      * @ParamConverter("post", options={"id" = "post_id"})
      * @ParamConverter("account", options={"id" = "account_id"})
      * @param Request $request
@@ -182,7 +180,7 @@ class PostController extends AbstractController
      * @param Account $account
      * @return JsonResponse
      */
-    public function deleteCommentsOfUser(Request $request, Post $post, Account $account)
+    public function deleteCommentsOfUser(Request $request, Post $post, Account $account): JsonResponse
     {
         $params = json_decode($request->getContent(), true);
 

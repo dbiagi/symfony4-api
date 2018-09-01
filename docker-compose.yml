@@ -27,8 +27,6 @@ services:
             MYSQL_ROOT_PASSWORD: 123
         networks:
             - local
-
-
 volumes:
     database: ~
     composer_cache: ~

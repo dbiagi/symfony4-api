@@ -16,11 +16,11 @@ class Paginator
     {
         $this->paginators = [
             new DoctrineQueryBuilderPaginator(),
-            new ArrayPaginator()
+            new ArrayPaginator(),
         ];
     }
 
-    public function paginate($target, int $page = 1, int $itensPerPage = 10, array $context = [])
+    public function paginate($target, int $page = 1, int $itensPerPage = 10, array $context = []): Pagination
     {
         foreach ($this->paginators as $paginator) {
             if ($paginator->supports($target)) {

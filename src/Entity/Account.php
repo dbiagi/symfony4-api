@@ -63,7 +63,7 @@ class Account
      */
     public $coins = 0;
 
-    public static function getAccountRoles()
+    public static function getAccountRoles(): array
     {
         return [self::ROLE_GUEST, self::ROLE_SUBSCRIBER];
     }

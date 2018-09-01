@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -68,7 +67,7 @@ class Post
         return [
             self::TYPE_PHOTO,
             self::TYPE_TEXT,
-            self::TYPE_VIDEO
+            self::TYPE_VIDEO,
         ];
     }
 }

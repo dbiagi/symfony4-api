@@ -94,8 +94,6 @@ class AccountService
             throw new InvalidEntityException($violations);
         }
 
-
-
         $this->em->persist($account);
         $this->em->flush();
 

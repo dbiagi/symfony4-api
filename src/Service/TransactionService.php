@@ -55,7 +55,7 @@ class TransactionService
         return $t;
     }
 
-    private function tax(Account $account, Transaction $reference)
+    private function tax(Account $account, Transaction $reference): void
     {
         $taxTotal = $reference->total * ($this->taxPercentage / 100);
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,14 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 trait Timestampable
 {
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
     public $updatedAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
@@ -28,8 +29,8 @@ trait Timestampable
      */
     public function prePersistTimestampable(): void
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -37,7 +38,7 @@ trait Timestampable
      */
     public function preUpdateTimestampable(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new DateTime();
     }
 
 }

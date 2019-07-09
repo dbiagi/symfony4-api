@@ -3,19 +3,21 @@
 namespace App\Helper;
 
 use App\Entity\Comment;
+use DateTime;
 
 class CommentSorter
 {
     /**
      * @param Comment[] $comments
      * @return Comment[]
+     * @throws \Exception
      */
     public static function sort(array $comments): array
     {
         $featureds = [];
-        $normal = [];
+        $normal    = [];
 
-        $now = new \DateTime();
+        $now = new DateTime();
 
         foreach ($comments as $comment) {
             if ($comment->coins > 0) {
@@ -31,7 +33,7 @@ class CommentSorter
             $normal[] = $comment;
         }
 
-        usort($featureds, function (Comment $a, Comment $b) use ($now) {
+        usort($featureds, function (Comment $a, Comment $b) {
             if ($a->coins === $b->coins) {
                 return 0;
             } else {

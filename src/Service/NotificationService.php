@@ -6,13 +6,16 @@ use App\Entity\Account;
 use App\Entity\Notification;
 use App\Exception\InvalidEntityException;
 use App\Mailer\NotificationMailer;
+use App\Repository\NotificationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Exception;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class NotificationService
 {
-    /** @var \App\Repository\NotificationRepository */
+    /** @var NotificationRepository */
     private $notificationRepository;
 
     /** @var ValidatorInterface */
@@ -32,12 +35,13 @@ class NotificationService
         NotificationMailer $mailer,
         ValidatorInterface $validator,
         $notificationLifespan
-    ) {
-        $this->em = $em;
-        $this->mailer = $mailer;
+    )
+    {
+        $this->em                     = $em;
+        $this->mailer                 = $mailer;
         $this->notificationRepository = $em->getRepository('App:Notification');
-        $this->validator = $validator;
-        $this->notificationLifespan = $notificationLifespan;
+        $this->validator              = $validator;
+        $this->notificationLifespan   = $notificationLifespan;
     }
 
     public function getNotificationByAccount(Account $account): QueryBuilder
@@ -51,8 +55,8 @@ class NotificationService
             return;
         }
 
-        $notification->viewedAt = new \DateTime();
-        $notification->expireAt = (new \DateTime())->modify(sprintf('+%d seconds', $this->notificationLifespan));
+        $notification->viewedAt = new DateTime();
+        $notification->expireAt = (new DateTime())->modify(sprintf('+%d seconds', $this->notificationLifespan));
 
         $this->em->persist($notification);
         $this->em->flush();
@@ -63,14 +67,14 @@ class NotificationService
      * @param $title
      * @param $content
      * @throws InvalidEntityException
-     * @throws \Exception
+     * @throws Exception
      */
     public function create(Account $to, $title, $content): void
     {
         $n = new Notification();
 
         $n->account = $to;
-        $n->title = $title;
+        $n->title   = $title;
         $n->content = $content;
 
         $violations = $this->validator->validate($n);

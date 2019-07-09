@@ -12,7 +12,7 @@ class Pagination
 
     public function __construct(array $data, int $count)
     {
-        $this->data = $data;
+        $this->data  = $data;
         $this->count = $count;
     }
 

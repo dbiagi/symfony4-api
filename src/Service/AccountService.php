@@ -3,9 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Account;
-use App\Exception\FloodingException;
 use App\Exception\InvalidEntityException;
-use App\Helper\DateTimeHelper;
 use App\Repository\AccountRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,8 +16,6 @@ class AccountService
     private $repository;
     /** @var CommentRepository */
     private $commentsRepository;
-    /** @var string */
-    private $commentCooldown;
     /** @var ValidatorInterface */
     private $validator;
     /** @var EntityManagerInterface */
@@ -27,14 +23,13 @@ class AccountService
 
     public function __construct(
         EntityManagerInterface $em,
-        ValidatorInterface $validator,
-        $commentCooldown
-    ) {
-        $this->em = $em;
-        $this->repository = $em->getRepository('App:Account');
+        ValidatorInterface $validator
+    )
+    {
+        $this->em                 = $em;
+        $this->repository         = $em->getRepository('App:Account');
         $this->commentsRepository = $em->getRepository('App:Comment');
-        $this->validator = $validator;
-        $this->commentCooldown = $commentCooldown;
+        $this->validator          = $validator;
     }
 
     public function find(int $id): ?Account
@@ -55,30 +50,6 @@ class AccountService
     public function findByEmail($email): ?Account
     {
         return $this->repository->findOneBy(['email' => $email]);
-    }
-
-    /**
-     * @param Account $account
-     * @return bool
-     * @throws FloodingException
-     */
-    public function isFlooding(Account $account): bool
-    {
-        $comment = $this->commentsRepository->findLastCommentByAccountId($account->id);
-
-        if ($comment === null) {
-            return false;
-        }
-
-        $now = new \DateTime();
-
-        $secondsAfterLastComment = DateTimeHelper::getDiffInSeconds($comment->createdAt, $now);
-
-        if ($secondsAfterLastComment < $this->commentCooldown) {
-            throw new FloodingException($this->commentCooldown - $secondsAfterLastComment);
-        }
-
-        return false;
     }
 
     /**

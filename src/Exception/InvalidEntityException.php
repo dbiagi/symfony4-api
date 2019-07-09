@@ -2,10 +2,11 @@
 
 namespace App\Exception;
 
+use Exception;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class InvalidEntityException extends \Exception
+class InvalidEntityException extends Exception
 {
     /** @var ConstraintViolationListInterface */
     private $violations;

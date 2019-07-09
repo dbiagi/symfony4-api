@@ -10,8 +10,8 @@ class TransactionRepository extends EntityRepository
     public function findTransctionsByAccountId(int $accountId): QueryBuilder
     {
         return $this->createQueryBuilder('t')
-            ->join('t.account', 'account')
-            ->where('account.id = :accountId')
-            ->setParameter('accountId', $accountId);
+                    ->join('t.account', 'account')
+                    ->where('account.id = :accountId')
+                    ->setParameter('accountId', $accountId);
     }
 }

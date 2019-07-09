@@ -2,7 +2,9 @@
 
 namespace App\Exception;
 
-class FloodingException extends \Exception
+use Exception;
+
+class FloodingException extends Exception
 {
     private const MESSAGE = 'You can\'t comment now. Wait %d seconds to comment again.';
 

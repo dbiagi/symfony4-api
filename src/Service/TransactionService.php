@@ -21,8 +21,8 @@ class TransactionService
 
     public function __construct(EntityManagerInterface $em, $taxPercentage)
     {
-        $this->em = $em;
-        $this->taxPercentage = $taxPercentage;
+        $this->em                    = $em;
+        $this->taxPercentage         = $taxPercentage;
         $this->transactionRepository = $em->getRepository('App:Transaction');
     }
 
@@ -38,10 +38,10 @@ class TransactionService
             throw new NotEnoughCoinsException($coins - $account->coins);
         }
 
-        $t = new Transaction();
+        $t          = new Transaction();
         $t->account = $account;
-        $t->total = $coins;
-        $t->type = Transaction::TYPE_DEBT;
+        $t->total   = $coins;
+        $t->type    = Transaction::TYPE_DEBT;
 
         $account->coins -= $coins;
 
@@ -59,10 +59,10 @@ class TransactionService
     {
         $taxTotal = $reference->total * ($this->taxPercentage / 100);
 
-        $t = new Transaction();
-        $t->account = $account;
-        $t->total = $taxTotal;
-        $t->type = Transaction::TYPE_DEBT;
+        $t            = new Transaction();
+        $t->account   = $account;
+        $t->total     = $taxTotal;
+        $t->type      = Transaction::TYPE_DEBT;
         $t->reference = $reference;
 
         $reference->total -= $taxTotal;
@@ -73,10 +73,10 @@ class TransactionService
 
     public function credit(Account $account, int $coins): Transaction
     {
-        $t = new Transaction();
-        $t->account = $account;
-        $t->type = Transaction::TYPE_CREDIT;
-        $t->total = $coins;
+        $t              = new Transaction();
+        $t->account     = $account;
+        $t->type        = Transaction::TYPE_CREDIT;
+        $t->total       = $coins;
         $account->coins += $coins;
 
         $this->em->persist($t);

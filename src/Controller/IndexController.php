@@ -26,7 +26,7 @@ class IndexController extends AbstractController
     {
         $readme = $this->kernel->getProjectDir() . '/README.md';
 
-        $html =  Markdown::defaultTransform(file_get_contents($readme));
+        $html = Markdown::defaultTransform(file_get_contents($readme));
 
         return new Response($html);
     }

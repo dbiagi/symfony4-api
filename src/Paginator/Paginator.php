@@ -2,6 +2,8 @@
 
 namespace App\Paginator;
 
+use RuntimeException;
+
 class Paginator
 {
     /** @var PaginatorInterface[] */
@@ -20,7 +22,7 @@ class Paginator
         ];
     }
 
-    public function paginate($target, int $page = 1, int $itensPerPage = 10, array $context = []): Pagination
+    public function paginate($target, $page = 1, $itensPerPage = 10, array $context = []): Pagination
     {
         foreach ($this->paginators as $paginator) {
             if ($paginator->supports($target)) {
@@ -30,6 +32,6 @@ class Paginator
 
         $type = is_object($target) ? get_class($target) : gettype($target);
 
-        throw new \RuntimeException(sprintf('No paginator found for %s class', $type));
+        throw new RuntimeException(sprintf('No paginator found for %s class', $type));
     }
 }

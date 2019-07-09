@@ -2,7 +2,9 @@
 
 namespace App\Exception;
 
-class NotEnoughCoinsException extends \Exception
+use Exception;
+
+class NotEnoughCoinsException extends Exception
 {
     private const MESSAGE = 'Você não tem saldo suficiente =(. Está faltando somente %d moedas.';
 

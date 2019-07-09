@@ -9,6 +9,7 @@ use App\Paginator\Paginator;
 use App\Service\AccountService;
 use App\Service\NotificationService;
 use App\Service\TransactionService;
+use Exception;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,12 +44,13 @@ class AccountController extends AbstractController
         TransactionService $transactionService,
         Paginator $paginator,
         SerializerInterface $serializer
-    ) {
-        $this->accountService = $accountService;
+    )
+    {
+        $this->accountService      = $accountService;
         $this->notificationService = $notificationService;
-        $this->transactionService = $transactionService;
-        $this->paginator = $paginator;
-        $this->serializer = $serializer;
+        $this->transactionService  = $transactionService;
+        $this->paginator           = $paginator;
+        $this->serializer          = $serializer;
     }
 
     /**
@@ -71,6 +73,8 @@ class AccountController extends AbstractController
 
     /**
      * @Route("/", methods={"post"})
+     * @param Request $request
+     * @return Response
      */
     public function post(Request $request): Response
     {
@@ -84,7 +88,7 @@ class AccountController extends AbstractController
             return new JsonResponse($data, Response::HTTP_CREATED, [], true);
         } catch (InvalidEntityException $e) {
             return new JsonResponse($e->getErrors(), Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -160,7 +164,7 @@ class AccountController extends AbstractController
 
         try {
             $this->transactionService->credit($account, $content['amount']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 

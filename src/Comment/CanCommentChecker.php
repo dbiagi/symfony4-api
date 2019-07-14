@@ -32,8 +32,10 @@ class CanCommentChecker
     {
         $this->floodingChecker->check($comment->author);
 
-        if ($comment->coins === 0 && $comment->author->role === Account::ROLE_GUEST && $comment->post->author === Account::ROLE_GUEST) {
-            throw new ForbiddenException('You can\'t comment on this post');
+        if ($comment->coins === 0 &&
+            $comment->author->role === Account::ROLE_GUEST &&
+            $comment->post->author->role === Account::ROLE_GUEST) {
+            throw new ForbiddenException('Você não pode comentar nesse post.');
         }
 
         return true;

@@ -12,6 +12,7 @@ services:
             - ./docker/php/conf/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
         environment:
             PHP_IDE_CONFIG: "serverName=docker"
+            SYMFONY_PHPUNIT_VERSION: "8.2"
         networks:
             - mariadb_default
     php74:

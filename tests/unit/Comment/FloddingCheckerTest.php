@@ -57,7 +57,7 @@ class FloddingCheckerTest extends UnitTestCase
         $this->assertFalse($floodingChecker->check($account));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

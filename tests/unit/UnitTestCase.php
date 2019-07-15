@@ -16,7 +16,7 @@ class UnitTestCase extends TestCase
     /** @var MockObject */
     protected $entityManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->faker = new DefaultGenerator();
         $this->entityManagerMock = $this->getMockBuilder(EntityManagerInterface::class)

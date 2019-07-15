@@ -15,8 +15,10 @@ class CanCommentCheckerTest extends UnitTestCase
     /** @var FloodingChecker */
     private $floodingCheckerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->floodingCheckerMock = $this->getMockBuilder(FloodingChecker::class)
                                           ->disableOriginalConstructor()
                                           ->getMock();

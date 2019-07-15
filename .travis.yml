@@ -1,0 +1,15 @@
+language: php
+
+php:
+    - 7.3
+    - 7.4snapshot
+
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+        - ./bin/.phpunit
+
+before_install:
+    - composer install
+
+script: ./bin/phpunit

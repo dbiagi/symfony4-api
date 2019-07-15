@@ -3,6 +3,9 @@ language: php
 php:
     - 7.3
     - 7.4snapshot
+env:
+    global:
+        SYMFONY_PHPUNIT_VERSION: "8.2"
 
 cache:
     directories:

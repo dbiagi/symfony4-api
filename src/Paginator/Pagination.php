@@ -25,35 +25,10 @@ class Pagination
     }
 
     /**
-     * @param array $data
-     *
-     * @return Pagination
-     */
-    public function setData(array $data): Pagination
-    {
-        $this->data = $data;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getCount(): int
     {
         return $this->count;
     }
-
-    /**
-     * @param int $count
-     *
-     * @return Pagination
-     */
-    public function setCount(int $count): Pagination
-    {
-        $this->count = $count;
-
-        return $this;
-    }
-
 }

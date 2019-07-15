@@ -14,14 +14,6 @@ class Paginator
         $this->load();
     }
 
-    private function load(): void
-    {
-        $this->paginators = [
-            new DoctrineQueryBuilderPaginator(),
-            new ArrayPaginator(),
-        ];
-    }
-
     public function paginate($target, $page = 1, $itensPerPage = 10, array $context = []): Pagination
     {
         foreach ($this->paginators as $paginator) {
@@ -33,5 +25,13 @@ class Paginator
         $type = is_object($target) ? get_class($target) : gettype($target);
 
         throw new RuntimeException(sprintf('No paginator found for %s class', $type));
+    }
+
+    private function load(): void
+    {
+        $this->paginators = [
+            new DoctrineQueryBuilderPaginator(),
+            new ArrayPaginator(),
+        ];
     }
 }

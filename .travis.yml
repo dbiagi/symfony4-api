@@ -1,8 +1,11 @@
 language: php
 
+sudo: false
+
 php:
     - 7.3
-    - 7.4snapshot
+#    - 7.4snapshot
+
 env:
     global:
         SYMFONY_PHPUNIT_VERSION: "8.2"

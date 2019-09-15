@@ -23,9 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AccountController extends AbstractController
 {
-    /** @var AccountService */
-    private $accountService;
-
     /** @var Paginator */
     private $paginator;
 
@@ -35,20 +32,13 @@ class AccountController extends AbstractController
     /** @var NotificationService */
     private $notificationService;
 
-    /** @var TransactionService */
-    private $transactionService;
-
     public function __construct(
-        AccountService $accountService,
         NotificationService $notificationService,
-        TransactionService $transactionService,
         Paginator $paginator,
         SerializerInterface $serializer
     )
     {
-        $this->accountService      = $accountService;
         $this->notificationService = $notificationService;
-        $this->transactionService  = $transactionService;
         $this->paginator           = $paginator;
         $this->serializer          = $serializer;
     }
@@ -57,12 +47,13 @@ class AccountController extends AbstractController
      * @Route("/", methods={"get"})
      *
      * @param Request $request
+     * @param AccountService $accountService
      *
      * @return JsonResponse
      */
-    public function listAll(Request $request): JsonResponse
+    public function listAll(Request $request, AccountService $accountService): JsonResponse
     {
-        $query = $this->accountService->findAll();
+        $query = $accountService->findAll();
 
         $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
@@ -74,14 +65,16 @@ class AccountController extends AbstractController
     /**
      * @Route("/", methods={"post"})
      * @param Request $request
+     * @param AccountService $accountService
+     *
      * @return Response
      */
-    public function post(Request $request): Response
+    public function post(Request $request, AccountService $accountService): Response
     {
         $account = $this->serializer->deserialize($request->getContent(), Account::class, 'json');
 
         try {
-            $account = $this->accountService->create($account);
+            $account = $accountService->create($account);
 
             $data = $this->serializer->serialize($account, 'json');
 
@@ -112,11 +105,12 @@ class AccountController extends AbstractController
      * @param Request $request
      * @param Account $account
      *
+     * @param AccountService $accountService
      * @return Response
      */
-    public function comments(Request $request, Account $account): Response
+    public function comments(Request $request, Account $account, AccountService $accountService): Response
     {
-        $query = $this->accountService->getComments($account->id);
+        $query = $accountService->getComments($account->id);
 
         $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
@@ -149,13 +143,15 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/coins", methods={"post"})
+     * @Route("/coins", methods={"post"})
      * @param Request $request
-     * @param Account $account
+     * @param TransactionService $transactionService
      * @return JsonResponse
      */
-    public function buyCoins(Request $request, Account $account): JsonResponse
+    public function buyCoins(Request $request, TransactionService $transactionService): JsonResponse
     {
+        $account = $this->getUser()->getAccount();
+
         $content = json_decode($request->getContent(), true);
 
         if (!isset($content['amount'])) {
@@ -163,7 +159,7 @@ class AccountController extends AbstractController
         }
 
         try {
-            $this->transactionService->credit($account, $content['amount']);
+            $transactionService->credit($account, $content['amount']);
         } catch (Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }

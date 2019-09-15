@@ -14,18 +14,19 @@ services:
             PHP_IDE_CONFIG: "serverName=docker"
             SYMFONY_PHPUNIT_VERSION: "8.2"
         networks:
-            - mariadb_default
-    php74:
-        build: docker/php7.4/
-        ports:
-            - 8081:80
-        volumes:
-            - .:/var/www/html
-            - ./docker/php7.4/conf/php.ini:/usr/local/etc/php/conf.d/php.ini
-            - ./docker/php7.4/conf/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
-        networks:
-            - mariadb_default
+            - redis_network
+#    php74:
+#        build: docker/php7.4/
+#        ports:
+#            - 8081:80
+#        volumes:
+#            - .:/var/www/html
+#            - ./docker/php7.4/conf/php.ini:/usr/local/etc/php/conf.d/php.ini
+#            - ./docker/php7.4/conf/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+#
 
 networks:
-    mariadb_default:
+#    postgres_network:
+#        external: true
+    redis_network:
         external: true

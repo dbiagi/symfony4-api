@@ -2,13 +2,14 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use App\Entity\Account;
 use Doctrine\ORM\QueryBuilder;
 
-class AccountRepository extends EntityRepository
+class AccountRepository extends AppRepository
 {
     public function findAllPaginated(): QueryBuilder
     {
-        return $this->createQueryBuilder('account');
+        return $this->entityManager->createQueryBuilder()
+                                   ->from(Account::class, 'account');
     }
 }

@@ -26,8 +26,8 @@ RUN docker-php-ext-install intl \
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
-# Install xdebug
-RUN pecl install xdebug && docker-php-ext-enable xdebug
+# Install php dependencies
+RUN pecl install xdebug redis && docker-php-ext-enable xdebug redis
 
 # Install composer
 RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \

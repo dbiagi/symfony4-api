@@ -23,7 +23,7 @@ class TransactionService
     {
         $this->em                    = $em;
         $this->taxPercentage         = $taxPercentage;
-        $this->transactionRepository = $em->getRepository('App:Transaction');
+        $this->transactionRepository = $em->getRepository(Transaction::class);
     }
 
     /**

@@ -1,6 +1,0 @@
-App\Entity\Post:
-    post_{0..100}:
-        title: '<sentence(4, true)>'
-        content: '<paragraphs(4, true)>'
-        author: '@account_*'
-        type: '<randomElement(["video", "photo", "text"])>'

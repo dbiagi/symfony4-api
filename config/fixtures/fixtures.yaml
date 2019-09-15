@@ -1,0 +1,25 @@
+App\Entity\Account:
+    account_{0..100}:
+        name: '<name()>'
+        email: '<email()>'
+        role: '50%? guest : subscriber'
+        coins: '20%? <numberBetween(100, 500)> : 0'
+
+App\Entity\ApiUser:
+    apiuser_{0..100}:
+        account: '@account_<current()>'
+        token: '<md5(@account_<current()>->email)>'
+
+App\Entity\Post:
+    post_{0..100}:
+        title: '<sentence(4, true)>'
+        content: '<paragraphs(4, true)>'
+        author: '@account_*'
+        type: '<randomElement(["video", "photo", "text"])>'
+
+App\Entity\Comment:
+    comment_{0..200}:
+        content: '<sentences(5, true)>'
+        author: '@account_*'
+        post: '@post_*'
+        coins: '10%? 50 : 0'

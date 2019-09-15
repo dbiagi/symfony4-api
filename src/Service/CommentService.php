@@ -5,74 +5,49 @@ namespace App\Service;
 use App\Entity\Account;
 use App\Entity\Comment;
 use App\Entity\Post;
-use App\Exception\InvalidEntityException;
-use App\Exception\NotEnoughCoinsException;
+use App\Event\CommentEventArgs;
+use App\Event\Type\Comment as CommentEventType;
 use App\Helper\CommentSorter;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CommentService
 {
     /** @var CommentRepository */
     private $commentsRepository;
+
     /**
      * @var EntityManagerInterface
      */
     private $em;
-    /**
-     * @var TransactionService
-     */
-    private $transactionService;
-    /**
-     * @var NotificationService
-     */
-    private $notificationService;
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
 
-    public function __construct(EntityManagerInterface $em, ValidatorInterface $validator, TransactionService $transactionService, NotificationService $notificationService)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher)
     {
-        $this->commentsRepository  = $em->getRepository('App:Comment');
-        $this->em                  = $em;
-        $this->transactionService  = $transactionService;
-        $this->notificationService = $notificationService;
-        $this->validator           = $validator;
+        $this->commentsRepository = $em->getRepository('App:Comment');
+        $this->em                 = $em;
+        $this->eventDispatcher    = $eventDispatcher;
     }
 
     /**
      * @param Comment $comment
-     * @throws NotEnoughCoinsException
-     * @throws InvalidEntityException
      */
     public function create(Comment $comment): void
     {
-        $violations = $this->validator->validate($comment);
+        $args = new CommentEventArgs();
+        $args->setComment($comment);
 
-        if ($violations->count() > 0) {
-            throw new InvalidEntityException($violations);
-        }
-
-        if ($comment->coins > 0) {
-            $this->transactionService->debit($comment->author, $comment->coins);
-        }
+        $this->eventDispatcher->dispatch(CommentEventType::COMMENT_CREATED, $args);
 
         $this->em->persist($comment);
         $this->em->flush();
 
-        $this->notificationService->create(
-            $comment->post->author,
-            'Someone commented on your post',
-            sprintf('The user %s has commented on your post "%s"', $comment->author->name, $comment->post->title)
-        );
-    }
-
-    public function getCommentsByAccount(Account $account): QueryBuilder
-    {
-        return $this->commentsRepository->findAllCommentsByAccountId($account->id);
+        $this->eventDispatcher->dispatch(CommentEventType::COMMENT_PERSISTED, $args);
     }
 
     public function getCommentsByPost(Post $post): array

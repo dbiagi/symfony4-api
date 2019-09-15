@@ -146,6 +146,9 @@
             "ref": "5ef2976310e8f9621c1a722a73bfbe115c1559a3"
         }
     },
+    "nikic/php-parser": {
+        "version": "v4.2.4"
+    },
     "ocramius/package-versions": {
         "version": "1.3.0"
     },
@@ -290,6 +293,15 @@
     "symfony/inflector": {
         "version": "v4.1.3"
     },
+    "symfony/maker-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
+    },
     "symfony/mime": {
         "version": "v4.3.2"
     },
@@ -346,6 +358,30 @@
             "version": "4.0",
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
+    },
+    "symfony/security-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "e5a0228251d1dd2bca4c8ef918e14423c06db625"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
+    "symfony/security-core": {
+        "version": "v4.3.4"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.3.4"
+    },
+    "symfony/security-guard": {
+        "version": "v4.3.4"
+    },
+    "symfony/security-http": {
+        "version": "v4.3.4"
     },
     "symfony/serializer": {
         "version": "v4.1.3"

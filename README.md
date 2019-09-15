@@ -1,4 +1,4 @@
-# api de posts e comentários
+# api de posts e comentários [![Build Status](https://travis-ci.org/dbiagi/symfony4-api.svg?branch=master)](https://travis-ci.org/dbiagi/symfony4-api)
 
 ## Tecnologias Usadas
 | Nome | Versao 

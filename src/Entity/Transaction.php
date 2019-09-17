@@ -47,7 +47,7 @@ class Transaction
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="account_uuid", referencedColumnName="uuid")
      * @Assert\NotNull()
      */
     public $account;

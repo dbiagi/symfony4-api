@@ -132,7 +132,7 @@ class CommentController extends AbstractController
             return new BadRequestJsonResponse(sprintf('Conta com email %s não encontrada.', $params['account']));
         }
 
-        if (($account->id !== $comment->author->id) && ($account->id !== $comment->post->author->id)) {
+        if (($account->uuid !== $comment->author->uuid) && ($account->uuid !== $comment->post->author->uuid)) {
             return new BadRequestJsonResponse('Somente o dono do comentário ou o dono do post pode apagar este comentário');
         }
 
@@ -164,7 +164,7 @@ class CommentController extends AbstractController
             return new BadRequestJsonResponse(sprintf('Conta com email %s não encontrada.', $params['account']));
         }
 
-        if ($postAuthor->id !== $post->author->id) {
+        if ($postAuthor->uuid !== $post->author->uuid) {
             new BadRequestJsonResponse('Somente o dono do post pode remover os comentários.');
         }
 

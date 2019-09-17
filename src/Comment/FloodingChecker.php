@@ -32,7 +32,7 @@ class FloodingChecker
      */
     public function check(Account $account): bool
     {
-        $comment = $this->commentsRepository->findLastCommentByAccountId($account->id);
+        $comment = $this->commentsRepository->findLastCommentByAccountId($account->uuid);
 
         if ($comment === null) {
             return false;

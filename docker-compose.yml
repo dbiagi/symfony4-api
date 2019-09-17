@@ -14,6 +14,7 @@ services:
             PHP_IDE_CONFIG: "serverName=docker"
             SYMFONY_PHPUNIT_VERSION: "8.2"
         networks:
+            - mariadb_network
             - redis_network
 #    php74:
 #        build: docker/php7.4/
@@ -26,7 +27,7 @@ services:
 #
 
 networks:
-#    postgres_network:
-#        external: true
+    mariadb_network:
+        external: true
     redis_network:
         external: true

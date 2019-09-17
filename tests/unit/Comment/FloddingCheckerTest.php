@@ -23,7 +23,7 @@ class FloddingCheckerTest extends UnitTestCase
         $account = $this->getAccountAbleToComment();
 
         $this->commentRepository->method('findLastCommentByAccountId')
-                                ->with($account->id)
+                                ->with($account->uuid)
                                 ->willReturn($this->getLastCommentAfterCooldown($account));
 
         $floodingChecker = new FloodingChecker($this->entityManagerMock, self::COMMENT_COOLDOWN);
@@ -36,7 +36,7 @@ class FloddingCheckerTest extends UnitTestCase
         $account = $this->getAccountAbleToComment();
 
         $this->commentRepository->method('findLastCommentByAccountId')
-                                ->with($account->id)
+                                ->with($account->uuid)
                                 ->willReturn($this->getLastCommentOnCooldown($account));
 
         $this->expectException(FloodingException::class);
@@ -50,7 +50,7 @@ class FloddingCheckerTest extends UnitTestCase
         $account = $this->getAccountAbleToComment();
 
         $this->commentRepository->method('findLastCommentByAccountId')
-                                ->with($account->id)
+                                ->with($account->uuid)
                                 ->willReturn(null);
 
         $floodingChecker = new FloodingChecker($this->entityManagerMock, self::COMMENT_COOLDOWN);
@@ -74,7 +74,7 @@ class FloddingCheckerTest extends UnitTestCase
     {
         $account = new Account();
 
-        $account->id    = 1;
+        $account->uuid  = 1;
         $account->name  = $this->faker->name;
         $account->role  = Account::ROLE_SUBSCRIBER;
         $account->email = $this->faker->email;

@@ -89,6 +89,6 @@ class TransactionService
 
     public function getTransactionByAccount(Account $account): QueryBuilder
     {
-        return $this->transactionRepository->findTransctionsByAccountId($account->id);
+        return $this->transactionRepository->findTransctionsByAccountId($account->uuid);
     }
 }

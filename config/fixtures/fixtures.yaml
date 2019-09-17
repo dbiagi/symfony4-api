@@ -6,7 +6,10 @@ App\Entity\Account:
         coins: '20%? <numberBetween(100, 500)> : 0'
 
 App\Entity\ApiUser:
-    apiuser_{0..100}:
+    apisuser_0:
+        account: '@account_0'
+        token: 'dccfb4d99e5946059887c671a2deb07b'
+    apiuser_{1..100}:
         account: '@account_<current()>'
         token: '<md5(@account_<current()>->email)>'
 

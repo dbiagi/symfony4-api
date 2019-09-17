@@ -57,7 +57,7 @@ class Post
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author_uuid", referencedColumnName="uuid")
      * @Assert\NotNull()
      */
     public $author;

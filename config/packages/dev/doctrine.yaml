@@ -1,5 +1,0 @@
-doctrine:
-    dbal:
-        driver: pdo_sqlite
-        charset: UTF8
-        url: '%env(resolve:DATABASE_URL)%'

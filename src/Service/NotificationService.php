@@ -46,7 +46,7 @@ class NotificationService
 
     public function getNotificationByAccount(Account $account): QueryBuilder
     {
-        return $this->notificationRepository->findNotificationsByAccountId($account->id);
+        return $this->notificationRepository->findNotificationsByAccountId($account->uuid);
     }
 
     public function read(Notification $notification): void

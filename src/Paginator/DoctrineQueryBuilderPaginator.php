@@ -17,7 +17,7 @@ class DoctrineQueryBuilderPaginator implements PaginatorInterface
      */
     public function paginate($qb, $page = 1, $itensPerPage = 10, array $context = []): Pagination
     {
-        $qb->select(sprintf('COUNT(%d)', $qb->getRootAlias()));
+        $qb->select(sprintf('COUNT(%d)', $qb->getRootAliases()));
         $count = $qb->getQuery()->getSingleScalarResult();
 
         $qb->select($qb->getRootAliases());

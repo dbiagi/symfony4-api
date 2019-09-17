@@ -9,6 +9,7 @@ use App\Paginator\Paginator;
 use App\Service\AccountService;
 use App\Service\NotificationService;
 use App\Service\TransactionService;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,16 +32,22 @@ class AccountController extends AbstractController
 
     /** @var NotificationService */
     private $notificationService;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
     public function __construct(
         NotificationService $notificationService,
         Paginator $paginator,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        EntityManagerInterface $entityManager
     )
     {
         $this->notificationService = $notificationService;
         $this->paginator           = $paginator;
         $this->serializer          = $serializer;
+        $this->entityManager       = $entityManager;
     }
 
     /**
@@ -51,10 +58,10 @@ class AccountController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function listAll(Request $request, AccountService $accountService): JsonResponse
+    public function listAll(Request $request): JsonResponse
     {
-        $query = $accountService->findAll();
-
+        $query = $this->entityManager->getRepository(Account::class)->findAllPaginated();
+        
         $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 
         $data = $this->serializer->serialize($pagination, 'json');
@@ -110,7 +117,7 @@ class AccountController extends AbstractController
      */
     public function comments(Request $request, Account $account, AccountService $accountService): Response
     {
-        $query = $accountService->getComments($account->id);
+        $query = $accountService->getComments($account->uuid);
 
         $pagination = $this->paginator->paginate($query, $request->query->getInt('page', 1));
 

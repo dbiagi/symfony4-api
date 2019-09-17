@@ -41,6 +41,7 @@ class Comment
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Account")
+     * @ORM\JoinColumn(referencedColumnName="uuid")
      * @Assert\NotNull()
      */
     public $author;

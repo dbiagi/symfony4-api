@@ -38,6 +38,7 @@ class ApiUser implements UserInterface
     /**
      * @var Account
      * @ORM\OneToOne(targetEntity="App\Entity\Account")
+     * @ORM\JoinColumn(referencedColumnName="uuid")
      */
     private $account;
 

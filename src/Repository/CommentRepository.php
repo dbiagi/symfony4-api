@@ -48,7 +48,7 @@ class CommentRepository extends EntityRepository
                     ->join('comment.author', 'account')
                     ->andWhere('account.id = :accountId')
                     ->andWhere('post.id = :postId')
-                    ->setParameter('accountId', $account->id)
+                    ->setParameter('accountId', $account->uuid)
                     ->setParameter('postId', $post->id)
                     ->getQuery()
                     ->getResult();
